@@ -1,0 +1,3 @@
+Spannende Fälle:
+
+SA,HU,H7,EK,4  => SK nicht Rechter, weil dann SA Guter => Widerspruch!!
