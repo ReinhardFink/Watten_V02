@@ -45,18 +45,18 @@ public class Test_FarbStichTest extends TestCase {
 		GameInfo result = new GameInfo(false);
 
 		stiche.add(new Round(deck.e7, deck.h7, deck.l7, deck.l8, 0));
-		result.setColorAt(ACORN.ordinal(), SURE);
+		result.setSuitAt(ACORN.ordinal(), SURE);
 		assertEquals(IMPOSSIBLE, new FarbStichTest(result, stiche).runTest());
 
-		result.setColorAt(HEART.ordinal(), SURE);
+		result.setSuitAt(HEART.ordinal(), SURE);
 		assertEquals(IMPOSSIBLE, new FarbStichTest(result, stiche).runTest());
 
-		result.setColorAt(LEAVE.ordinal(), SURE);
+		result.setSuitAt(LEAVE.ordinal(), SURE);
 		assertEquals(IMPOSSIBLE, new FarbStichTest(result, stiche).runTest());
 
 		stiche.clear();
 		stiche.add(new Round(deck.e7, deck.h7, deck.s7, deck.s8, 3));
-		result.setColorAt(BELL.ordinal(), SURE);
+		result.setSuitAt(BELL.ordinal(), SURE);
 		assertEquals(IMPOSSIBLE, new FarbStichTest(result, stiche).runTest());
 	}
 
@@ -162,8 +162,8 @@ public class Test_FarbStichTest extends TestCase {
 		System.out.println("Rechter_is_Fix_Tests Nr. 1");
 		// Rechter: hK
 		GameInfo result = new GameInfo(true);
-		result.setNumberAt(KING.ordinal(),SURE);
-		result.setColorAt(HEART.ordinal(),SURE);
+		result.setRankAt(KING.ordinal(),SURE);
+		result.setSuitAt(HEART.ordinal(),SURE);
 		stiche.clear();
 		// reiner Farbstich
 		stiche.add(new Round(deck.e7, deck.lA, deck.l7, deck.e8, 3));

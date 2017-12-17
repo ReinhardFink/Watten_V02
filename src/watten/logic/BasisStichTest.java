@@ -1,75 +1,104 @@
+/**
+ * BasisStichTest is the abstract basis class on which all concrete test-classes build on.
+ * 
+ * In a concrete test class, for example FarbStichTest all special settings defining a "Stich" are made.
+ * For a "Farbstich" it is necessary  that rank & suit of the winner card are IMPOSSIBLE for "Schlag" & "Trumpf".
+ * 
+ * After defining the concrete "Stich" in the derived classes, BasisStichTest checks, 
+ * if any contradiction in any played round can be found.
+ * This is done, with a cloned gameInfo, where the Possibility-Arrays for rank and suit are set as described bevor.
+ * 
+ * With this approach it is easier to check earlier played rounds for contradictions.
+ * An other approach you can see in FarbStichTest-simple, where all the logic is done 
+ * in the derived class. But here you have to deal with the problem, how to check for 
+ * contradictions in earlier rounds. 
+ * For Example: is the round before a "Farbstich" or a "Trumpfstich".
+ * 
+ */
 package watten.logic;
 
 import static watten.logic.Possibility.*;
 
 import watten.CONSTANTS;
 import watten.Card;
+import watten.Round;
 import watten.Rounds;
 
-public abstract class BasisStichTest {
+public class BasisStichTest {
 	
 	private final boolean VERBOSE = true;
 	
 	protected GameInfo gameInfo;
 	protected Rounds rounds;
-	protected Card keyCard;
-	protected Possibility winnerNewNumberResult; 
-	protected Possibility winnerNewColorResult;
+	protected Card lastWinnerCard;
+	protected Possibility winnerRankPossibility; 
+	protected Possibility winnerSuitPossibility;
+	protected boolean winningVELIsetsTestToIMPOSSIBLE;
 	
 	// Constructor
-	public BasisStichTest(GameInfo result, Rounds playedRounds) {
+	public BasisStichTest(GameInfo gameInfo, Rounds rounds) {
+		this.rounds = rounds;
+		this.winnerRankPossibility = null; 
+		this.winnerSuitPossibility = null;
+		this.lastWinnerCard = rounds.last().getWinnerCard();
 		try {
-			this.gameInfo = result.clone();
+			this.gameInfo = gameInfo.clone();
 		} 
 		catch(CloneNotSupportedException e) {
-			System.out.println("could not clone: " + result); 
+			System.out.println("could not clone: " + gameInfo); 
 		}	
-		this.rounds = playedRounds;
-		this.winnerNewNumberResult = null; 
-		this.winnerNewColorResult = null;
 
 	}
-	// Setters and Getters
-	public GameInfo getResult() { return gameInfo; }
 	
-	public Rounds getRounds() { return rounds; }
+	protected Possibility setTestSpezials() { return POSSIBLE; }
 	
-	public void setKeyCard(Card keyCard) { this.keyCard = keyCard; }
-	
-	public void setWinnerNewNumberResult(Possibility winnerNewNumberResult) {
-		this.winnerNewNumberResult = winnerNewNumberResult;
-	}
+	// new RUNTEST hoffentlich
+	public Possibility runTest1() {
+		// Test is IMPOSSIBLE, if rank already SURE or IMPOSSIBLE and we want to set it to opposite,
+		// winnerRankPossibility always SURE or IMPOSSIBLE!
+		//
+		//if (winnerRankPossibility == IMPOSSIBLE && gameInfo.getRankPossibilityAt(lastWinnerCard.rank.ordinal()) == SURE) return IMPOSSIBLE;
+		//if (winnerRankPossibility == SURE && gameInfo.getRankPossibilityAt(lastWinnerCard.rank.ordinal()) == IMPOSSIBLE) return IMPOSSIBLE;
+		if (gameInfo.getRankPossibilityAt(lastWinnerCard.rank.ordinal()) == winnerRankPossibility.opposite()) 
+			return IMPOSSIBLE;
+		// Test is IMPOSSIBLE, if suit already SURE or IMPOSSIBLE and we want to set it to opposite,
+		if ((winnerSuitPossibility != POSSIBLE) 
+			   && (winnerSuitPossibility == gameInfo.getSuitPossibilityAt(lastWinnerCard.suit.ordinal()).opposite()))
+			return IMPOSSIBLE;
 		
-	public void setWinnerNewColorResult(Possibility winnerNewColorResult) { 
-		this.winnerNewColorResult = winnerNewColorResult;
-	}
 	
+		
+		// test rounds for contradiction
+		for (Round round : rounds) {
+			// first card starts as winner
+			int currentWinner = 0;
+			for (int i = 1; i < round.size(); i++) {
+				if (!round.get(currentWinner).beats(round.get(i), gameInfo)) {
+					currentWinner = i;
+					System.out.println(currentWinner);
+				}
+			}
+			if (currentWinner != round.winner) return IMPOSSIBLE;
+		}
+		return POSSIBLE;
+	}
+
 	// runTest the strategy-method
 	public Possibility runTest() {
 		//GameInfoMessage.appendVerboseMessage("TESTING for: Basisstich");
-		if(blockVeli()) return IMPOSSIBLE;
-		defineTest();
-		if(gameInfo.isRechterFix()) return makeTestsWithRechterFix();
-		if(setUpResult() != POSSIBLE) return setUpResult();
+		if(winningVELIsetsTestToIMPOSSIBLE && rounds.last().getWinnerCard().equals(CONSTANTS.VELI)) return IMPOSSIBLE;
+		//if(winningVELIsetsTestToIMPOSSIBLE && lastWinnerCard.equals(CONSTANTS.VELI)) return IMPOSSIBLE;
+
 		if(setTestSpezials() != POSSIBLE) return setTestSpezials();
+		
+		if(gameInfo.isRechterFix()) return makeTestsWithRechterFix();
+		
+		if(setNewGameInfo() != POSSIBLE) return setNewGameInfo();
+		
 		if(testPreviousWinners() != POSSIBLE) return testPreviousWinners();
+		
 		return POSSIBLE;
 	}
-	
-	// Strategy methods, must be overwritten in subclasses
-	protected boolean blockVeli() { 
-		if(rounds.getWinnerCardInRound(rounds.size() - 1).equals(CONSTANTS.VELI)) return true;
-		else return false;
-	}
-	
-	/*
-	 * set Keycard and 
-	 * setWinnerNewNumberResult( ...) and
-	 * setWinnerNewColorResult( ...);
-	 */
-	public abstract void defineTest();
-	
-	protected Possibility setTestSpezials() { return POSSIBLE; }
 	
 	// private Strategiemethoden
 	// behandelt alle Tests, wenn der Rechte fix ist.
@@ -80,32 +109,30 @@ public abstract class BasisStichTest {
 	}
 	
 	private boolean isGuaterInTrumpfStichTest() {
-		return winnerNewNumberResult == IMPOSSIBLE && 
-			   winnerNewColorResult == SURE && 
+		return winnerRankPossibility == IMPOSSIBLE && 
+			   winnerSuitPossibility == SURE && 
 			   gameInfo.isGuaterFix() &&
-			   gameInfo.getGuater().equals(keyCard);
+			   gameInfo.getGuater().equals(lastWinnerCard);
 	}
 	private boolean winnerCardFitsStichTest() { // Farbe, Trump
-		return ((gameInfo.getNumberPossibilityAt(keyCard.rank.ordinal()) == winnerNewNumberResult) && 
-		        (gameInfo.getColorPossibilityAt(keyCard.suit.ordinal()) == winnerNewColorResult));
+		return ((gameInfo.getRankPossibilityAt(lastWinnerCard.rank.ordinal()) == winnerRankPossibility) && 
+		        (gameInfo.getSuitPossibilityAt(lastWinnerCard.suit.ordinal()) == winnerSuitPossibility));
 	}
 	
-	private Possibility setUpResult() {
-		if(hasStichConfictWithResult()) return IMPOSSIBLE;
+	private Possibility setNewGameInfo() {
+		if(hasNewGameInfoContradictionWithGameInfo()) return IMPOSSIBLE;
 		else {
-			gameInfo.setNumberAt(keyCard.rank.ordinal(),winnerNewNumberResult);
-			gameInfo.setColorAt(keyCard.suit.ordinal(),winnerNewColorResult);
+			gameInfo.setRankAt(lastWinnerCard.rank.ordinal(),winnerRankPossibility);
+			gameInfo.setSuitAt(lastWinnerCard.suit.ordinal(),winnerSuitPossibility);
 			return POSSIBLE;
 		}
 	}
 	
-	private boolean hasStichConfictWithResult() {
-		gameInfo.getColorPossibilityAt(keyCard.suit.ordinal());
-		winnerNewColorResult.opposite();
-		return (gameInfo.getNumberPossibilityAt(keyCard.rank.ordinal()) == winnerNewNumberResult.opposite()) 
+	private boolean hasNewGameInfoContradictionWithGameInfo() {
+		return (gameInfo.getRankPossibilityAt(lastWinnerCard.rank.ordinal()) == winnerRankPossibility.opposite()) 
 				|| 
-			   ((winnerNewColorResult != POSSIBLE) 
-					   && (gameInfo.getColorPossibilityAt(keyCard.suit.ordinal()) == winnerNewColorResult.opposite()));
+			   ((winnerSuitPossibility != POSSIBLE) 
+					   && (gameInfo.getSuitPossibilityAt(lastWinnerCard.suit.ordinal()) == winnerSuitPossibility.opposite()));
 	}
 
 	private Possibility testPreviousWinners() {
@@ -121,8 +148,8 @@ public abstract class BasisStichTest {
 	// public fürs Testen
 	public int findWinnerPosInRound(int stichNumber) {
 		int currentWinnerPosition = 0;
-		for(int cardNumber = 1; cardNumber < rounds.get(stichNumber).cards.length; cardNumber++) 
-			if(!(rounds.get(stichNumber).cards[currentWinnerPosition].beats(rounds.get(stichNumber).cards[cardNumber],gameInfo)))
+		for(int cardNumber = 1; cardNumber < rounds.get(stichNumber).size(); cardNumber++) 
+			if(!(rounds.get(stichNumber).get(currentWinnerPosition).beats(rounds.get(stichNumber).get(cardNumber),gameInfo)))
 				currentWinnerPosition = cardNumber;
 		return currentWinnerPosition;
 	}
@@ -142,9 +169,9 @@ public abstract class BasisStichTest {
 		if(VERBOSE) System.out.println("entering correctColor in Stichnumber : " + stichNumber);
 		Possibility testValueColorUp = POSSIBLE;
 		try {
-			if(gameInfo.getColorPossibilityAt(rounds.getWinnerCardInRound(stichNumber).suit.ordinal()) == POSSIBLE) {
+			if(gameInfo.getSuitPossibilityAt(rounds.getWinnerCardInRound(stichNumber).suit.ordinal()) == POSSIBLE) {
 				GameInfo saveResult = gameInfo.clone();
-				gameInfo.setColorAt(rounds.getWinnerCardInRound(stichNumber).suit.ordinal(),SURE);
+				gameInfo.setSuitAt(rounds.getWinnerCardInRound(stichNumber).suit.ordinal(),SURE);
 				testValueColorUp = testPreviousWinners();
 				gameInfo = saveResult;
 				if(VERBOSE) System.out.println("Stich Nr.: " + stichNumber + " corrected Color: " + rounds.get(stichNumber).getWinnerCard().suit.ordinal());
@@ -161,9 +188,9 @@ public abstract class BasisStichTest {
 		if(VERBOSE) System.out.println("entering correctNumber in Stichnumber : " + stichNumber);
 		Possibility testValueNumberUp = POSSIBLE;
 		try {
-			if(gameInfo.getNumberPossibilityAt(rounds.getWinnerCardInRound(stichNumber).rank.ordinal()) == POSSIBLE) {
+			if(gameInfo.getRankPossibilityAt(rounds.getWinnerCardInRound(stichNumber).rank.ordinal()) == POSSIBLE) {
 				GameInfo saveResult = gameInfo.clone();
-				gameInfo.setNumberAt(rounds.getWinnerCardInRound(stichNumber).rank.ordinal(),SURE);
+				gameInfo.setRankAt(rounds.getWinnerCardInRound(stichNumber).rank.ordinal(),SURE);
 				testValueNumberUp = testPreviousWinners();
 				gameInfo = saveResult;
 				if(VERBOSE) System.out.println("Stich Nr.: " + stichNumber + " corrected Number: " + rounds.get(stichNumber).getWinnerCard().rank.ordinal());
@@ -183,8 +210,8 @@ public abstract class BasisStichTest {
 		try {
 			if(isGuaterUpgradePossible(stichNumber)) {
 				GameInfo saveResult = gameInfo.clone();
-				gameInfo.setColorAt(rounds.getWinnerCardInRound(stichNumber).suit.ordinal(),SURE);
-				gameInfo.setNumberAt(rounds.getWinnerCardInRound(stichNumber).calcRechterFromGuater().rank.ordinal(),SURE);
+				gameInfo.setSuitAt(rounds.getWinnerCardInRound(stichNumber).suit.ordinal(),SURE);
+				gameInfo.setRankAt(rounds.getWinnerCardInRound(stichNumber).calcRechterFromGuater().rank.ordinal(),SURE);
 				testGuaterUp = testPreviousWinners();
 				gameInfo = saveResult;
 				if(VERBOSE) {
@@ -210,19 +237,19 @@ public abstract class BasisStichTest {
 	}
 	
 	private boolean isKeyCardWinnerCardForUpgrade(int stichNumber) {
-		return ((keyCard.suit.ordinal() == rounds.getWinnerCardInRound(stichNumber).suit.ordinal()) && 
-				   (keyCard.rank.ordinal() == rounds.getWinnerCardInRound(stichNumber).rank.ordinal()));
+		return ((lastWinnerCard.suit.ordinal() == rounds.getWinnerCardInRound(stichNumber).suit.ordinal()) && 
+				   (lastWinnerCard.rank.ordinal() == rounds.getWinnerCardInRound(stichNumber).rank.ordinal()));
 	}
 	
 	private boolean isNotColorAndNumberBlocked(int stichNumber) {
 		// in Result: (¬-1 && ¬-1) &&  (0 || 0)
-		return ((gameInfo.getColorPossibilityAt(rounds.getWinnerCardInRound(stichNumber).suit.ordinal()) != IMPOSSIBLE) &&
-				(gameInfo.getNumberPossibilityAt(rounds.getWinnerCardInRound(stichNumber).calcRechterFromGuater().rank.ordinal()) != IMPOSSIBLE));
+		return ((gameInfo.getSuitPossibilityAt(rounds.getWinnerCardInRound(stichNumber).suit.ordinal()) != IMPOSSIBLE) &&
+				(gameInfo.getRankPossibilityAt(rounds.getWinnerCardInRound(stichNumber).calcRechterFromGuater().rank.ordinal()) != IMPOSSIBLE));
 	}
 	
 	private boolean isColorOrNumberPossible(int stichNumber) {
-		return ((gameInfo.getColorPossibilityAt(rounds.getWinnerCardInRound(stichNumber).suit.ordinal()) == POSSIBLE) ||
-				(gameInfo.getNumberPossibilityAt(rounds.getWinnerCardInRound(stichNumber).calcRechterFromGuater().rank.ordinal()) == POSSIBLE));
+		return ((gameInfo.getSuitPossibilityAt(rounds.getWinnerCardInRound(stichNumber).suit.ordinal()) == POSSIBLE) ||
+				(gameInfo.getRankPossibilityAt(rounds.getWinnerCardInRound(stichNumber).calcRechterFromGuater().rank.ordinal()) == POSSIBLE));
 	}
 	
 }

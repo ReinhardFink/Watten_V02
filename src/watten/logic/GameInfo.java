@@ -61,19 +61,19 @@ public class GameInfo implements Cloneable {
 		return this.mitGuatem;
 	}
 
-	public void setNumberAt(int position, Possibility value) {
+	public void setRankAt(int position, Possibility value) {
 		schlag.setValueAt(position, value);
 	}
 
-	public void setColorAt(int position, Possibility value) {
+	public void setSuitAt(int position, Possibility value) {
 		trumpf.setValueAt(position, value);
 	}
 
-	public Possibility getNumberPossibilityAt(int position) {
+	public Possibility getRankPossibilityAt(int position) {
 		return schlag.get(position);
 	}
 
-	public Possibility getColorPossibilityAt(int position) {
+	public Possibility getSuitPossibilityAt(int position) {
 		return trumpf.get(position);
 	}
 

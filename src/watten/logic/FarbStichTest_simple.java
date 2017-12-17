@@ -46,13 +46,13 @@ public class FarbStichTest_simple extends BasisStichTest_simple {
 		Round lastRound = playedRounds.last();
 		// IMPOSSIBLE cases:
 		// Color Hit IMPOSSIBLE: Winner.suit != First_Card.suit!
-		if (lastRound.getWinnerCard().suit != lastRound.cards[0].suit) {
+		if (lastRound.getWinnerCard().suit != lastRound.get(0).suit) {
 			GameInfoMessage.appendVerboseMessage("Color Hit IMPOSSIBLE: Winner.suit != First_Card.suit!");
 			return Possibility.IMPOSSIBLE;
 		}
 		
 		// Color Hit IMPOSSIBLE: winner.suit == firstCardsuit, but winner DOES NOT wins all in own suit!  
-		if (lastRound.getWinnerCard().suit == lastRound.cards[0].suit && !lastRound.isWinnerBiggestInSuit()) {
+		if (lastRound.getWinnerCard().suit == lastRound.get(0).suit && !lastRound.isWinnerBiggestInSuit()) {
 			GameInfoMessage.appendVerboseMessage("Color Hit IMPOSSIBLE: winner.suit == firstCardsuit, but winner DOES NOT wins all in own suit!");
 			return Possibility.IMPOSSIBLE;
 		}
@@ -84,7 +84,7 @@ public class FarbStichTest_simple extends BasisStichTest_simple {
 		// POSSIBLE cases:
 		// TRUMPF not know && winner.suit == fistCard.suit && winner wins all in own suit!
 		if (!gameInfo.isTrumpfFix() && 
-				lastRound.cards[lastRound.winner].suit == lastRound.cards[0].suit && 
+				lastRound.get(lastRound.winner).suit == lastRound.get(0).suit && 
 				lastRound.isWinnerBiggestInSuit()) {
 			GameInfoMessage.appendVerboseMessage("Color Hit POSSIBLE: TRUMPF not know && winner.suit == fistCard.suit && winner wins all in own suit!");
 			return Possibility.POSSIBLE;
@@ -93,7 +93,7 @@ public class FarbStichTest_simple extends BasisStichTest_simple {
 		// SURE cases:
 		// TRUMPF know && not TRUMPF in round && winner.suit == fistCard.suit && winner.number > fistCard.number!
 		if (gameInfo.isTrumpfFix() && !lastRound.hasSuit(gameInfo.getTrumpf()) && 
-				lastRound.getWinnerCard().rank.ordinal() > lastRound.cards[0].rank.ordinal() &&
+				lastRound.getWinnerCard().rank.ordinal() > lastRound.get(0).rank.ordinal() &&
 				lastRound.isWinnerBiggestInSuit()) {
 			GameInfoMessage.appendVerboseMessage("Color Hit SURE: TRUMPF know && not TRUMPF in round && winner.suit == fistCard.suit && winner.number > fistCard.number!");
 			return Possibility.SURE;

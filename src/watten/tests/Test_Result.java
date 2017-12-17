@@ -23,7 +23,7 @@ public class Test_Result extends TestCase {
 		try {
 			GameInfo result = new GameInfo(false);
 			
-			result.setNumberAt(KING.ordinal(),Possibility.SURE);
+			result.setRankAt(KING.ordinal(),Possibility.SURE);
 			assertEquals(true,result.isSchlagFix());
 			assertEquals(KING,result.getSchlag());
 			// klonen
@@ -32,7 +32,7 @@ public class Test_Result extends TestCase {
 			assertEquals(true,resultClone.isSchlagFix());
 			assertEquals(KING,resultClone.getSchlag());
 			// resultClone wird nun verändert!
-			resultClone.setNumberAt(KNIGHT.ordinal(),Possibility.SURE);
+			resultClone.setRankAt(KNIGHT.ordinal(),Possibility.SURE);
 			// Test, ob result unverändert!
 			assertEquals(true,result.isSchlagFix());
 			assertEquals(KING,result.getSchlag());
@@ -48,22 +48,22 @@ public class Test_Result extends TestCase {
 	
 	public void test_isSchlagFix_getSchlag() {
 		GameInfo result = new GameInfo(false);
-		result.setNumberAt(KING.ordinal(),Possibility.SURE);
+		result.setRankAt(KING.ordinal(),Possibility.SURE);
 		assertEquals(true,result.isSchlagFix());
 		assertEquals(KING,result.getSchlag());
 		
 		result = new GameInfo(false);
-		result.setNumberAt(SIX.ordinal(),Possibility.IMPOSSIBLE);
-		result.setNumberAt(SEVEN.ordinal(),Possibility.IMPOSSIBLE);
+		result.setRankAt(SIX.ordinal(),Possibility.IMPOSSIBLE);
+		result.setRankAt(SEVEN.ordinal(),Possibility.IMPOSSIBLE);
 		assertEquals(false,result.isSchlagFix());
 		//assertEquals(-1,result.getSchlag());
 		
-		result.setNumberAt(SIX.ordinal(),Possibility.SURE);
+		result.setRankAt(SIX.ordinal(),Possibility.SURE);
 		assertEquals(true,result.isSchlagFix());
 		assertEquals(SIX,result.getSchlag());
 		
-		result.setNumberAt(SIX.ordinal(),Possibility.IMPOSSIBLE);
-		result.setNumberAt(ACE.ordinal(),Possibility.SURE);
+		result.setRankAt(SIX.ordinal(),Possibility.IMPOSSIBLE);
+		result.setRankAt(ACE.ordinal(),Possibility.SURE);
 		assertEquals(true,result.isSchlagFix());
 		assertEquals(ACE,result.getSchlag());
 	}
@@ -74,16 +74,16 @@ public class Test_Result extends TestCase {
 		assertEquals(false,result.isTrumpfFix());
 		//assertEquals(-1,result.getTrumpf());
 		
-		result.setColorAt(ACORN.ordinal(),Possibility.IMPOSSIBLE);
-		result.setColorAt(HEART.ordinal(),Possibility.IMPOSSIBLE);
+		result.setSuitAt(ACORN.ordinal(),Possibility.IMPOSSIBLE);
+		result.setSuitAt(HEART.ordinal(),Possibility.IMPOSSIBLE);
 		assertEquals(false,result.isTrumpfFix());
 		//assertEquals(-1,result.getTrumpf());
 		
-		result.setColorAt(ACORN.ordinal(),Possibility.SURE);
+		result.setSuitAt(ACORN.ordinal(),Possibility.SURE);
 		assertEquals(true,result.isTrumpfFix());
 		assertEquals(ACORN,result.getTrumpf());
 		
-		result.setColorAt(BELL.ordinal(),Possibility.SURE);
+		result.setSuitAt(BELL.ordinal(),Possibility.SURE);
 		assertEquals(true,result.isTrumpfFix());
 		assertEquals(BELL,result.getTrumpf());
 	}
@@ -93,23 +93,23 @@ public class Test_Result extends TestCase {
 		
 		assertEquals(false,result.isRechterFix());
 		
-		result.setColorAt(ACORN.ordinal(),Possibility.SURE);
+		result.setSuitAt(ACORN.ordinal(),Possibility.SURE);
 		assertEquals(false,result.isRechterFix());
 		
-		result.setNumberAt(ACE.ordinal(),Possibility.SURE);
+		result.setRankAt(ACE.ordinal(),Possibility.SURE);
 		assertEquals(true,result.isRechterFix());
 	}
 	
 	public void test_getRechter() {
 		GameInfo result = new GameInfo(false);
 		
-		result.setColorAt(ACORN.ordinal(),Possibility.SURE);
-		result.setNumberAt(ACE.ordinal(),Possibility.SURE);
+		result.setSuitAt(ACORN.ordinal(),Possibility.SURE);
+		result.setRankAt(ACE.ordinal(),Possibility.SURE);
 		Card rechter = new Card(ACORN,ACE);
 		assertEquals(true,result.getRechter().equals(rechter));
 		
-		result.setColorAt(BELL.ordinal(),Possibility.SURE);
-		result.setNumberAt(SIX.ordinal(),Possibility.SURE);
+		result.setSuitAt(BELL.ordinal(),Possibility.SURE);
+		result.setRankAt(SIX.ordinal(),Possibility.SURE);
 		rechter = new Card(BELL,SIX);
 		assertEquals(true,result.getRechter().equals(rechter));
 	}
@@ -117,13 +117,13 @@ public class Test_Result extends TestCase {
 	public void test_getGuater() {
 		GameInfo result = new GameInfo(true);
 		
-		result.setColorAt(ACORN.ordinal(),Possibility.SURE);
-		result.setNumberAt(ACE.ordinal(),Possibility.SURE);
+		result.setSuitAt(ACORN.ordinal(),Possibility.SURE);
+		result.setRankAt(ACE.ordinal(),Possibility.SURE);
 		Card guater = new Card(ACORN,SEVEN);
 		assertEquals(true,result.getGuater().equals(guater));
 		
-		result.setColorAt(BELL.ordinal(),Possibility.SURE);
-		result.setNumberAt(ACE.ordinal(),Possibility.SURE);
+		result.setSuitAt(BELL.ordinal(),Possibility.SURE);
+		result.setRankAt(ACE.ordinal(),Possibility.SURE);
 		guater = new Card(BELL,SEVEN);
 		assertEquals(true,result.getGuater().equals(guater));
 	}

@@ -38,7 +38,7 @@ public class Test_BasisStichTest extends TestCase {
 	
 	public void test_testWinner_LinkerStich() {
 		GameInfo result = new GameInfo(false);
-		result.setNumberAt(EIGHT.ordinal(),SURE) ;
+		result.setRankAt(EIGHT.ordinal(),SURE) ;
 		stiche.add(new Round(deck.h7,deck.h8,deck.hK,deck.hA,3));
 		basisStichTest = new BasisStichTest(result,stiche) { public void defineTest() {}; };
 		assertEquals(1,basisStichTest.findWinnerPosInRound(0));
@@ -50,8 +50,8 @@ public class Test_BasisStichTest extends TestCase {
 	
 	public void test_testWinner_RechterStichtLinkenOhneGuaten() {
 		GameInfo result = new GameInfo(false);
-		result.setNumberAt(EIGHT.ordinal(),SURE) ;
-		result.setColorAt(BELL.ordinal(),SURE) ;
+		result.setRankAt(EIGHT.ordinal(),SURE) ;
+		result.setSuitAt(BELL.ordinal(),SURE) ;
 		
 		stiche.add(new Round(deck.h7,deck.h8,deck.hK,deck.hA,3));
 		basisStichTest = new BasisStichTest(result,stiche) { public void defineTest() {}; };
@@ -79,8 +79,8 @@ public class Test_BasisStichTest extends TestCase {
 	
 	public void test_testWinner_RechterStichtLinkenMitGuaten() {
 		GameInfo result = new GameInfo(true);
-		result.setNumberAt(EIGHT.ordinal(),SURE) ;
-		result.setColorAt(BELL.ordinal(),SURE);
+		result.setRankAt(EIGHT.ordinal(),SURE) ;
+		result.setSuitAt(BELL.ordinal(),SURE);
 		
 		stiche.add(new Round(deck.h7,deck.h8,deck.hK,deck.hA,3));
 		basisStichTest = new BasisStichTest(result,stiche) { public void defineTest() {}; };

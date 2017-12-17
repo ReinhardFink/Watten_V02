@@ -115,7 +115,7 @@ public class GameInfoCreator implements Observer {
 
 	private void blockImpossibleNumbersInCurrentStich() {
 		Round lastRound = playedRounds.last();
-		for (Card toTestCard : lastRound.cards) {
+		for (Card toTestCard : lastRound) {
 			if (toTestCard.rank == lastRound.getWinnerCard().rank)
 				continue;
 			if (gameInfo.isMitGuatem() 
@@ -123,17 +123,17 @@ public class GameInfoCreator implements Observer {
 					&& toTestCard.rank == lastRound.getWinnerCard().calcRechterFromGuater().rank)
 				continue;
 			// block if number IMPOSSIBLE for Schlag
-			gameInfo.setNumberAt(toTestCard.rank.ordinal(), IMPOSSIBLE);
+			gameInfo.setRankAt(toTestCard.rank.ordinal(), IMPOSSIBLE);
 		}
 	}
 
 	private void repairWrongFromGuatemBlocked() {
 		for (Round stich : playedRounds)
 			// winner made "Farbstich"
-			if ((gameInfo.getNumberPossibilityAt(stich.getWinnerCard().rank.ordinal()) == IMPOSSIBLE)
-					&& (gameInfo.getColorPossibilityAt(stich.getWinnerCard().suit.ordinal()) == IMPOSSIBLE))
-				for (Card card : stich.cards)
-					gameInfo.setNumberAt(card.rank.ordinal(), IMPOSSIBLE);
+			if ((gameInfo.getRankPossibilityAt(stich.getWinnerCard().rank.ordinal()) == IMPOSSIBLE)
+					&& (gameInfo.getSuitPossibilityAt(stich.getWinnerCard().suit.ordinal()) == IMPOSSIBLE))
+				for (Card card : stich)
+					gameInfo.setRankAt(card.rank.ordinal(), IMPOSSIBLE);
 	}
 
 	private void runTest() {
@@ -162,11 +162,11 @@ public class GameInfoCreator implements Observer {
 	}
 
 	private void lastWinnerIsNoTrumpf() {
-		gameInfo.setColorAt(playedRounds.last().getWinnerCard().suit.ordinal(), IMPOSSIBLE);
+		gameInfo.setSuitAt(playedRounds.last().getWinnerCard().suit.ordinal(), IMPOSSIBLE);
 	}
 
 	private void lastWinnerIsNoSchlag() {
-		gameInfo.setNumberAt(playedRounds.last().getWinnerCard().rank.ordinal(), IMPOSSIBLE);
+		gameInfo.setRankAt(playedRounds.last().getWinnerCard().rank.ordinal(), IMPOSSIBLE);
 	}
 
 	private void runExcept4Rules() {
@@ -215,28 +215,28 @@ public class GameInfoCreator implements Observer {
 
 	// set Values in Result
 	private void lastWinnerIsGuater() {
-		gameInfo.setNumberAt(playedRounds.last().getWinnerCard().calcRechterFromGuater().rank.ordinal(),
+		gameInfo.setRankAt(playedRounds.last().getWinnerCard().calcRechterFromGuater().rank.ordinal(),
 				SURE);
-		gameInfo.setColorAt(playedRounds.last().getWinnerCard().suit.ordinal(), SURE);
+		gameInfo.setSuitAt(playedRounds.last().getWinnerCard().suit.ordinal(), SURE);
 	}
 
 	private void lastWinnerIsRechter() {
-		gameInfo.setNumberAt(playedRounds.last().getWinnerCard().rank.ordinal(), SURE);
-		gameInfo.setColorAt(playedRounds.last().getWinnerCard().suit.ordinal(), SURE);
+		gameInfo.setRankAt(playedRounds.last().getWinnerCard().rank.ordinal(), SURE);
+		gameInfo.setSuitAt(playedRounds.last().getWinnerCard().suit.ordinal(), SURE);
 	}
 
 	private void lastWinnerIsLinker() {
-		gameInfo.setNumberAt(playedRounds.last().getWinnerCard().rank.ordinal(), SURE);
-		gameInfo.setColorAt(playedRounds.last().getWinnerCard().suit.ordinal(),IMPOSSIBLE);
+		gameInfo.setRankAt(playedRounds.last().getWinnerCard().rank.ordinal(), SURE);
+		gameInfo.setSuitAt(playedRounds.last().getWinnerCard().suit.ordinal(),IMPOSSIBLE);
 	}
 
 	private void lastWinnerIsTrumpf() {
-		gameInfo.setNumberAt(playedRounds.last().getWinnerCard().rank.ordinal(), IMPOSSIBLE);
-		gameInfo.setColorAt(playedRounds.last().getWinnerCard().suit.ordinal(), SURE);
+		gameInfo.setRankAt(playedRounds.last().getWinnerCard().rank.ordinal(), IMPOSSIBLE);
+		gameInfo.setSuitAt(playedRounds.last().getWinnerCard().suit.ordinal(), SURE);
 	}
 
 	private void lastWinnerIsFarbe() {
-		gameInfo.setNumberAt(playedRounds.last().getWinnerCard().rank.ordinal(), IMPOSSIBLE);
-		gameInfo.setColorAt(playedRounds.last().getWinnerCard().suit.ordinal(), IMPOSSIBLE);
+		gameInfo.setRankAt(playedRounds.last().getWinnerCard().rank.ordinal(), IMPOSSIBLE);
+		gameInfo.setSuitAt(playedRounds.last().getWinnerCard().suit.ordinal(), IMPOSSIBLE);
 	}
 }

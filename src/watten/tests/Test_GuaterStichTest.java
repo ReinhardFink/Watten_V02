@@ -225,8 +225,8 @@ public class Test_GuaterStichTest extends TestCase {
 		System.out.println("Rechter_is_Fix_Tests Nr. 1");
 		// Rechter: hK
 		GameInfo result = new GameInfo(true);
-		result.setNumberAt(KING.ordinal(),SURE);
-		result.setColorAt(HEART.ordinal(),SURE);
+		result.setRankAt(KING.ordinal(),SURE);
+		result.setSuitAt(HEART.ordinal(),SURE);
 		stiche.clear();
 		// reiner Farbstich
 		stiche.add(new Round(deck.e7, deck.lA, deck.l7, deck.e8, 3));

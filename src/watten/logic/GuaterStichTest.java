@@ -1,21 +1,21 @@
 package watten.logic;
 
+import static watten.logic.Possibility.*;
+
 import watten.Rounds;
 
 public class GuaterStichTest extends BasisStichTest {
  
-	public GuaterStichTest(GameInfo result, Rounds stiche) {
-		super(result,stiche);
-	}
-	
-	public void defineTest() {
-		setKeyCard(getRounds().get(getRounds().size() - 1).getWinnerCard().calcRechterFromGuater());
-		setWinnerNewNumberResult(Possibility.SURE);
-		setWinnerNewColorResult(Possibility.SURE);
+	public GuaterStichTest(GameInfo gameInfo, Rounds rounds) {
+		super(gameInfo, rounds);
+		winnerRankPossibility = SURE; 
+		winnerSuitPossibility = SURE;
+		winningVELIsetsTestToIMPOSSIBLE = true;
+		lastWinnerCard = rounds.last().getWinnerCard().calcRechterFromGuater();
 	}
 	
 	protected Possibility setTestSpezials() { 
-		if(getResult().isMitGuatem()) return Possibility.POSSIBLE;
+		if(gameInfo.isMitGuatem()) return Possibility.POSSIBLE;
 		else return Possibility.IMPOSSIBLE;
 	}
 }

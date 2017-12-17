@@ -21,8 +21,8 @@ public class Test_CardRelation extends TestCase {
 		GameInfo result = new GameInfo(true);
 		// GUATER: LEAF-JACK
 		// RECHETR LEAF-TEN
-		result.setNumberAt(TEN.ordinal(),SURE);
-		result.setColorAt(LEAVE.ordinal(),SURE);
+		result.setRankAt(TEN.ordinal(),SURE);
+		result.setSuitAt(LEAVE.ordinal(),SURE);
 		Card guater = new Card(deck.lU);
 		Card rechter = new Card(deck.l10);
 		Card linker1 = new Card(deck.e10);

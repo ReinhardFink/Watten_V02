@@ -53,7 +53,7 @@ public class Test_StichCalculator extends TestCase {
 		stiche.add(new Round(d_.hO,d_.sU,d_.sA,d_.h9,0));	//6~,7~,8~,9-,10~,U-,O~,K~,A-
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		
 		result = new GameInfo(false);
@@ -62,15 +62,15 @@ public class Test_StichCalculator extends TestCase {
 		stiche.add(new Round(d_.eU,d_.sO,d_.e7,d_.eK,3));	//6~,7-,8~,9~,10~,U-,O~,K~,A~
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));	
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));	
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 	}
 	
@@ -81,15 +81,15 @@ public class Test_StichCalculator extends TestCase {
 		stiche.add(new Round(d_.eO,d_.sU,d_.sA,d_.h9,0));	//6~,7~,8~,9-,10~,U~,O~,K~,A-
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		//---------------------------------------
 		result = new GameInfo(true);
@@ -98,15 +98,15 @@ public class Test_StichCalculator extends TestCase {
 		stiche.add(new Round(d_.l7,d_.s6,d_.e8,d_.e10,0));	//6-,7~,8-,9~,10-,U~,O~,K~,A~
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		//---------------------------------------
 		result = new GameInfo(true);
 		stiche.clear();
@@ -114,64 +114,64 @@ public class Test_StichCalculator extends TestCase {
 		stiche.add(new Round(d_.l7,d_.s6,d_.e8,d_.eA,0));	//6-,7~,8-,9~,10~,U~,O~,K~,A~
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		//---------------------------------------
 		result = new GameInfo(true);
-		result.setColorAt(BELL.ordinal(),POSSIBLE);
+		result.setSuitAt(BELL.ordinal(),POSSIBLE);
 		stiche.clear();
 		//  Rechter s7
 		stiche.add(new Round(d_.s7,d_.s6,d_.e8,d_.eA,0));	//6-,7~,8-,9~,10~,U~,O~,K~,A~
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		//---------------------------------------
 		result = new GameInfo(true);
-		result.setColorAt(BELL.ordinal(),POSSIBLE);
+		result.setSuitAt(BELL.ordinal(),POSSIBLE);
 		stiche.clear();
 		// Rechter s7
 		stiche.add(new Round(d_.s7,d_.h7,d_.e8,d_.eA,0));	//6-,7~,8-,9~,10~,U~,O~,K~,A~
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		
 		stiche.clear();
 		stiche.add(new Round(d_.s7,d_.s8,d_.s9,d_.s10,0));	//6~,7~,8-,9-,10-,U~,O~,K~,A~
 		result = new GameInfo(true);
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 	}
 	
 	public void test_calcSchlag_with_Guater_SerienTests() {
@@ -181,34 +181,34 @@ public class Test_StichCalculator extends TestCase {
 		stiche.add(new Round(d_.eO,d_.sU,d_.sA,d_.h9,0));	//6~,7~,8~,9-,10~,U~,O~,K~,A-
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		
 		stiche.add(new Round(d_.lO,d_.s6,d_.e8,d_.e10,3));	//6-,7~,8-,9-,10~,U~,O-,K~,A-
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		stiche.add(new Round(d_.l7,d_.s10,d_.eU,d_.eK,3));	//6-,7-,8-,9-,10-,U-,O-,K+,A-
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(SURE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(SURE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(true,result.isSchlagFix());
 		//---------------------------------------
 		// neues Spiel
@@ -219,29 +219,29 @@ public class Test_StichCalculator extends TestCase {
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
 		// As bleibt durch 7 geschützt
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		
 		stiche.add(new Round(d_.h8,d_.s6,d_.eO,d_.e9,1));	//6~,7~,8-,9-,10~,U-,O-,K~,A~
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		
 		stiche.add(new Round(d_.s8,d_.s10,d_.sA,d_.lK,2));	//6~,7~,8-,9-,10-,U-,O-,K~,A~
@@ -252,29 +252,29 @@ public class Test_StichCalculator extends TestCase {
 		stiche.add(new Round(d_.lO,d_.l10,d_.eO,d_.eK,0));	//6~,7~,8-,9-,10-,U-,O-,K-,A~
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		
 		stiche.add(new Round(d_.eA,d_.h10,d_.e7,d_.eK,0));	//6~,7-,8-,9-,10-,U-,O-,K-,A~
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		
 		//---------------------------------------
@@ -285,48 +285,48 @@ public class Test_StichCalculator extends TestCase {
 		stiche.add(new Round(d_.eU,d_.sO,d_.e7,d_.eK,3));	//6~,7-,8~,9~,10~,U-,O~,K~,A~
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
 		// Ober wird von König geschützt		
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		
 		stiche.add(new Round(d_.lK,d_.s6,d_.eA,d_.h8,2));	//6-,7-,8-,9~,10~,U-,O~,K~,A~
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
 		// Ober wird von König beschützt, der wiederum von As beschützt wird!
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
 		// König wird von As beschütz
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		
 		stiche.add(new Round(d_.s9,d_.h10,d_.hK,d_.l7,3));	//6-,7-,8-,9-,10-,U-,O-,K-,A+
-		result.setColorAt(LEAVE.ordinal(),SURE);
+		result.setSuitAt(LEAVE.ordinal(),SURE);
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
 		
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(SURE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(SURE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(true,result.isSchlagFix());
 		
 		//---------------------------------------
@@ -337,29 +337,29 @@ public class Test_StichCalculator extends TestCase {
 		stiche.add(new Round(d_.eK,d_.lO,d_.e7,d_.lK,3));	//6~,7-,8~,9~,10~,U~,O~,K~,A~
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));	
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));	
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		
 		stiche.add(new Round(d_.hK,d_.lU,d_.e8,d_.s10,1));	//6~,7-,8-,9~,10~,U~,O~,K-,A~
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));	
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));	
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		
 		//---------------------------------------
@@ -370,46 +370,46 @@ public class Test_StichCalculator extends TestCase {
 		stiche.add(new Round(d_.e7,d_.s10,d_.e8,d_.sK,2));	//6~,7~,8~,9~,10-,U~,O~,K-,A~
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));	
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));	
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		
 		stiche.add(new Round(d_.l8,d_.lU,d_.h9,d_.lO,3));	//6~,7~,8-,9-,10-,U~,O~,K-,A~
 		//result.setColorAt(CONSTANTS.LAUB,SURE);
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));	
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));	
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		
 		//selbe Auswerung wie oben, aber Laub als Schlag fix; 
 		//7 muss nun wegen erstem 8 schlägt 7 herausfliegen
-		result.setColorAt(LEAVE.ordinal(),SURE);
+		result.setSuitAt(LEAVE.ordinal(),SURE);
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(SIX.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(SEVEN.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(EIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(NINE.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(TEN.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(JACK.ordinal()));	
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(KNIGHT.ordinal()));
-		assertEquals(IMPOSSIBLE,result.getNumberPossibilityAt(KING.ordinal()));
-		assertEquals(POSSIBLE,result.getNumberPossibilityAt(ACE.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(SIX.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(SEVEN.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(EIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(NINE.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(TEN.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(JACK.ordinal()));	
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(KNIGHT.ordinal()));
+		assertEquals(IMPOSSIBLE,result.getRankPossibilityAt(KING.ordinal()));
+		assertEquals(POSSIBLE,result.getRankPossibilityAt(ACE.ordinal()));
 		assertEquals(false,result.isSchlagFix());
 		
 	}

@@ -5,6 +5,7 @@ import static watten.logic.Possibility.*;
 
 import watten.CONSTANTS;
 import watten.logic.GameInfo;
+import watten.logic.GameInfoMessage;
 import watten.logic.Possibility;
 
 import static watten.Rank.*;
@@ -51,108 +52,94 @@ public class Card {
 		// test GUATER
 		if(gameInfo.isMitGuatem() && gameInfo.isGuaterFix()) {
 			// this is GUATER
-			if (this.equals(gameInfo.getGuater())) return true;
+			if (this.equals(gameInfo.getGuater())) {
+				GameInfoMessage.verbose("Guater " + this + " beates " + card);
+				return true;
+			}
 			// card is GUATER
-			if (card.equals(gameInfo.getGuater())) return false;
+			if (card.equals(gameInfo.getGuater())) {
+				GameInfoMessage.verbose("Guater " + card + " beates " + this);
+				return false;
+			}
 		}
 		// from here no GUATER possible
 		
 		// test RECHTER
 		if (gameInfo.isRechterFix()) {
-			if(this.equals(gameInfo.getRechter())) return true;
-			if(card.equals(gameInfo.getRechter())) return false;
+			if(this.equals(gameInfo.getRechter())) {
+				GameInfoMessage.verbose("Rechter " + this + " beates " + card);
+				return true;
+			}
+			if(card.equals(gameInfo.getRechter())) {
+				GameInfoMessage.verbose("Rechter " + card + " beates " + this);
+				return false;
+			}
 		}
 		// from here no RECHTER possible
 			
 		// test LINKER
 		if (gameInfo.isSchlagFix()) {
 			// FIRST LINKER beats
-			if (this.rank == gameInfo.getSchlag()) return true;
+			if (this.rank == gameInfo.getSchlag()) {
+				GameInfoMessage.verbose("Linker " + this + " beates Linker " + card);
+				return true;
+			}
 			// second LINKER only if NO first LINKEr
-			else if (card.rank == gameInfo.getSchlag()) return false;
+			else if (card.rank == gameInfo.getSchlag()) {
+				GameInfoMessage.verbose("Linker " + card + " beates " + this);
+				return false;
+			}
 		}
 		
 		// from here no LINKER possible
 		// test TRUMPF
 		if (gameInfo.isTrumpfFix()) { 
 			// test TRUMPF beats COLOR
-			if (this.suit == gameInfo.getTrumpf() && card.suit != gameInfo.getTrumpf()) return true; 
-			if (this.suit != gameInfo.getTrumpf() && card.suit == gameInfo.getTrumpf()) return false; 
+			if (this.suit == gameInfo.getTrumpf() && card.suit != gameInfo.getTrumpf()) {
+				GameInfoMessage.verbose("Trumpf " + this + " beates Suit " + card);
+				return true; 
+			}
+			if (this.suit != gameInfo.getTrumpf() && card.suit == gameInfo.getTrumpf()) {
+				GameInfoMessage.verbose("Trumpf " + card + " beates Suit " + this);
+				return false; 
+			}
 			// TRUMPF beats TRUMPF
 			if (this.suit == gameInfo.getTrumpf() && card.suit == gameInfo.getTrumpf()) {
-				if (this.rank.ordinal() > card.rank.ordinal()) return true;
-				else return false;
+				if (this.rank.ordinal() > card.rank.ordinal()) {
+					GameInfoMessage.verbose("Trumpf " + this + " beates Trumpf " + card);
+					return true;
+				}
+				else {
+					GameInfoMessage.verbose("Trumpf " + card + " beates Trumpf " + this);
+					return false;
+				}
 			}
 			// test VELI
 			if (this.suit != gameInfo.getTrumpf() && card.suit != gameInfo.getTrumpf()) {
-				if (this.equals(CONSTANTS.VELI)) return true;
-				if (card.equals(CONSTANTS.VELI)) return false;
+				if (this.equals(CONSTANTS.VELI)) {
+					GameInfoMessage.verbose("Veli " + this + " beates " + card);
+					return true;
+				}
+				if (card.equals(CONSTANTS.VELI)) {
+					GameInfoMessage.verbose("Veli " + card + " beates " + this);
+					return false;
+				}
 			}
 		}
 		// from here no TRUMPF possible
 		
 		// SUIT vs SUIT
 		// first SUIT beats second different SUIT
-		if(this.suit.ordinal() != card.suit.ordinal()) return true;
+		if(this.suit.ordinal() != card.suit.ordinal()) {
+			GameInfoMessage.verbose("Suit " + this + " beats " + card);
+			return true;
+		}
 		// SUIT beats same SUIT
-		if(this.rank.ordinal() >= card.rank.ordinal()) return true;
+		if(this.rank.ordinal() >= card.rank.ordinal()) {
+			GameInfoMessage.verbose("Suit " + card + " beats " + this);
+			return true;
+		}
+		System.out.println("Error");
 		return false;
-	}
-
-	public Possibility getBeatPossibility(Card card, GameInfo gameInfo) {
-		
-		// test GUATER
-		if(gameInfo.isMitGuatem() && gameInfo.isGuaterFix()) {
-			// this is GUATER
-			if (this.equals(gameInfo.getGuater())) return SURE;
-			// card is GUATER
-			if (card.equals(gameInfo.getGuater())) return IMPOSSIBLE;
-		}
-		// from here no GUATER possible
-		
-		// test RECHTER
-		if (gameInfo.isRechterFix()) {
-			if(this.equals(gameInfo.getRechter())) return SURE;
-			if(card.equals(gameInfo.getRechter())) return IMPOSSIBLE;
-		}
-		// from here no RECHTER possible
-			
-		// test LINKER
-		if (gameInfo.isSchlagFix()) {
-			// FIRST LINKER beats
-			if (this.rank == gameInfo.getSchlag()) return SURE;
-			// second LINKER only if NO first LINKEr
-			else if (card.rank == gameInfo.getSchlag()) return IMPOSSIBLE;
-		}
-		
-		// from here no LINKER possible
-		// test TRUMPF
-		if (gameInfo.isTrumpfFix()) { 
-			// test TRUMPF beats COLOR
-			if (this.suit == gameInfo.getTrumpf() && card.suit != gameInfo.getTrumpf()) return SURE; 
-			if (this.suit != gameInfo.getTrumpf() && card.suit == gameInfo.getTrumpf()) return IMPOSSIBLE; 
-			// TRUMPF beats TRUMPF
-			if (this.suit == gameInfo.getTrumpf() && card.suit == gameInfo.getTrumpf()) {
-				if (this.rank.ordinal() > card.rank.ordinal()) return SURE;
-				else return IMPOSSIBLE;
-			}
-			if (this.suit != gameInfo.getTrumpf() && card.suit != gameInfo.getTrumpf()) {
-				if (this.rank.ordinal() > card.rank.ordinal()) return SURE;
-				else return IMPOSSIBLE;
-			}
-			// test VELI
-			if (this.suit != gameInfo.getTrumpf() && card.suit != gameInfo.getTrumpf()) {
-				if (this.equals(CONSTANTS.VELI)) return SURE;
-				if (card.equals(CONSTANTS.VELI)) return IMPOSSIBLE;
-			}
-		}
-		// from here no TRUMPF possible
-		
-		// SUIT vs SUIT
-		// first SUIT beats second different SUIT
-		if(this.suit.ordinal() != card.suit.ordinal()) return SURE;
-		// SUIT beats same SUIT
-		if(this.rank.ordinal() >= card.rank.ordinal()) return IMPOSSIBLE;
-		return IMPOSSIBLE;
 	}
 }
