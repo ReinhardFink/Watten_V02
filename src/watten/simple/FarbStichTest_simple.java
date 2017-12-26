@@ -1,12 +1,13 @@
-package watten.logic;
+package watten.simple;
 
 import watten.CONSTANTS;
-import watten.Rounds;
-import watten.Round;
+import watten.logic.GameInfo;
+import watten.logic.GameInfoMessage;
+import watten.logic.Possibility;
 
 public class FarbStichTest_simple extends BasisStichTest_simple {
 	
-	public FarbStichTest_simple(GameInfo result, Rounds playedRounds) {
+	public FarbStichTest_simple(GameInfo result, Rounds_simple playedRounds) {
 		super(result,playedRounds);
 	}
 
@@ -43,7 +44,7 @@ public class FarbStichTest_simple extends BasisStichTest_simple {
 	@Override
 	public Possibility runTest() {
 		GameInfoMessage.appendVerboseMessage("TESTING for: Farbstich");
-		Round lastRound = playedRounds.last();
+		Round_simple lastRound = rounds.last();
 		// IMPOSSIBLE cases:
 		// Color Hit IMPOSSIBLE: Winner.suit != First_Card.suit!
 		if (lastRound.getWinnerCard().suit != lastRound.get(0).suit) {
@@ -84,7 +85,7 @@ public class FarbStichTest_simple extends BasisStichTest_simple {
 		// POSSIBLE cases:
 		// TRUMPF not know && winner.suit == fistCard.suit && winner wins all in own suit!
 		if (!gameInfo.isTrumpfFix() && 
-				lastRound.get(lastRound.winner).suit == lastRound.get(0).suit && 
+				lastRound.getWinnerCard().suit == lastRound.get(0).suit && 
 				lastRound.isWinnerBiggestInSuit()) {
 			GameInfoMessage.appendVerboseMessage("Color Hit POSSIBLE: TRUMPF not know && winner.suit == fistCard.suit && winner wins all in own suit!");
 			return Possibility.POSSIBLE;

@@ -1,13 +1,7 @@
 package watten;
 
-import static watten.logic.Possibility.*;
-
-
-import watten.CONSTANTS;
 import watten.logic.GameInfo;
 import watten.logic.GameInfoMessage;
-import watten.logic.Possibility;
-
 import static watten.Rank.*;
 
 public class Card {

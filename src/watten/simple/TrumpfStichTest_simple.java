@@ -1,13 +1,14 @@
-package watten.logic;
+package watten.simple;
 
 import static watten.logic.Possibility.*;
 
-import watten.Rounds;
-import watten.Round;
+import watten.logic.GameInfo;
+import watten.logic.GameInfoMessage;
+import watten.logic.Possibility;
 
 public class TrumpfStichTest_simple extends BasisStichTest_simple {
 
-	public TrumpfStichTest_simple(GameInfo result, Rounds stiche) {
+	public TrumpfStichTest_simple(GameInfo result, Rounds_simple stiche) {
 		super(result, stiche);
 	}
 
@@ -38,7 +39,7 @@ public class TrumpfStichTest_simple extends BasisStichTest_simple {
 
 	public Possibility runTest() {
 		GameInfoMessage.appendVerboseMessage("TESTING for: Trumpfstich");
-		Round lastRound = playedRounds.last();
+		Round_simple lastRound = rounds.last();
 		// IMPOSSIBLE cases:
 		// SCHLAG is winner in round!
 		if (gameInfo.isSchlagFix() && gameInfo.getSchlag() == lastRound.getWinnerCard().rank) {

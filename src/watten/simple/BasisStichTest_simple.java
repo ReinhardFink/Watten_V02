@@ -15,21 +15,21 @@
  * For Example: is the round before a "Farbstich" or a "Trumpfstich".
  * 
  */
-package watten.logic;
+package watten.simple;
 
 import static watten.logic.Possibility.*;
 
 import watten.CONSTANTS;
 import watten.Card;
-import watten.Round;
-import watten.Rounds;
+import watten.logic.GameInfo;
+import watten.logic.Possibility;
 
-public class BasisStichTest {
+public class BasisStichTest_simple {
 	
 	private final boolean VERBOSE = true;
 	
 	protected GameInfo gameInfo;
-	protected Rounds rounds;
+	protected Rounds_simple rounds;
 	protected Card lastWinnerCard;
 	protected Possibility winnerRankPossibility; 
 	protected Possibility winnerSuitPossibility;
@@ -41,7 +41,7 @@ public class BasisStichTest {
 	 * @param rounds
 	 * 
 	 */
-	public BasisStichTest(GameInfo gameInfo, Rounds rounds) {
+	public BasisStichTest_simple(GameInfo gameInfo, Rounds_simple rounds) {
 		this.rounds = rounds;
 		this.winnerRankPossibility = null; 
 		this.winnerSuitPossibility = null;
@@ -81,7 +81,7 @@ public class BasisStichTest {
 	
 		
 		// test rounds for contradiction
-		for (Round round : rounds) {
+		for (Round_simple round : rounds) {
 			// first card starts as winner
 			int currentWinner = 0;
 			for (int i = 1; i < round.size(); i++) {
@@ -165,7 +165,7 @@ public class BasisStichTest {
 	 * Method, where previous winners are tested for contradictions
 	 */
 	private Possibility testPreviousWinners() {
-		for(Round round : rounds) {
+		for(Round_simple round : rounds) {
 			if(!findWinnerPosInRound(round).equals(round.getWinnerCard()))
 				if(!correctWinner(round)) 
 					return IMPOSSIBLE;
@@ -173,7 +173,7 @@ public class BasisStichTest {
 		return POSSIBLE;
 	}
 	
-	public Card findWinnerPosInRound(Round round) {
+	public Card findWinnerPosInRound(Round_simple round) {
 		int currentWinnerPosition = 0;
 		for(int cardNumber = 1; cardNumber < round.size(); cardNumber++) 
 			if(!round.get(currentWinnerPosition).beats(round.get(cardNumber),gameInfo))
@@ -181,7 +181,7 @@ public class BasisStichTest {
 		return round.get(currentWinnerPosition);
 	}
 	
-	private boolean correctWinner(Round round) { 
+	private boolean correctWinner(Round_simple round) { 
 		if((correctColor(round) == IMPOSSIBLE) &&
 		   (correctNumber(round) == IMPOSSIBLE) &&
 		   (correctToGuater(round) == IMPOSSIBLE))
@@ -196,7 +196,7 @@ public class BasisStichTest {
 	 * if suit of winnerCard is POSSIBLE set it to SURE
 	 * and previous winner are tested again for contradictions
 	 */
-	private Possibility correctColor(Round round) {
+	private Possibility correctColor(Round_simple round) {
 		if(VERBOSE) System.out.println("entering correctColor in Stichnumber : " + round);
 		Possibility testValueColorUp = POSSIBLE;
 		try {
@@ -221,7 +221,7 @@ public class BasisStichTest {
 	 * if rank of winnerCard is POSSIBLE set it to SURE
 	 * and previous winner are tested again for contradictions
 	 */
-	private Possibility correctNumber(Round round) {
+	private Possibility correctNumber(Round_simple round) {
 		if(VERBOSE) System.out.println("entering correctNumber in Stichnumber : " + round);
 		Possibility testValueNumberUp = POSSIBLE;
 		try {
@@ -246,7 +246,7 @@ public class BasisStichTest {
 	 * if rank of winnerCard is POSSIBLE set it to SURE
 	 * and previous winner are tested again for contradictions
 	 */
-	private Possibility correctToGuater(Round round) {
+	private Possibility correctToGuater(Round_simple round) {
 		if(VERBOSE) System.out.println("entering correctToGuater in Stichnumber : " + round);
 		if(!gameInfo.isMitGuatem()) return IMPOSSIBLE;
 		Possibility testGuaterUp = POSSIBLE;
@@ -272,7 +272,7 @@ public class BasisStichTest {
 	}
 
 	
-	private boolean isGuaterUpgradePossible(Round round) {
+	private boolean isGuaterUpgradePossible(Round_simple round) {
 		// keyCard selbst darf nicht verändert werden, da sie ja den Testfall definiert!
 		if(isKeyCardWinnerCardForUpgrade(round)) return false;
 		if(isNotColorAndNumberBlocked(round) && isColorOrNumberPossible(round))
@@ -281,20 +281,20 @@ public class BasisStichTest {
 	}
 
 	
-	private boolean isKeyCardWinnerCardForUpgrade(Round round) {
+	private boolean isKeyCardWinnerCardForUpgrade(Round_simple round) {
 		return ((lastWinnerCard.suit.ordinal() == round.getWinnerCard().suit.ordinal()) && 
 				   (lastWinnerCard.rank.ordinal() == round.getWinnerCard().rank.ordinal()));
 	}
 
 	
-	private boolean isNotColorAndNumberBlocked(Round round) {
+	private boolean isNotColorAndNumberBlocked(Round_simple round) {
 		// in Result: (¬-1 && ¬-1) &&  (0 || 0)
 		return ((gameInfo.getSuitPossibilityAt(round.getWinnerCard().suit.ordinal()) != IMPOSSIBLE) &&
 				(gameInfo.getRankPossibilityAt(round.getWinnerCard().calcRechterFromGuater().rank.ordinal()) != IMPOSSIBLE));
 	}
 
 	
-	private boolean isColorOrNumberPossible(Round round) {
+	private boolean isColorOrNumberPossible(Round_simple round) {
 		return ((gameInfo.getSuitPossibilityAt(round.getWinnerCard().suit.ordinal()) == POSSIBLE) ||
 				(gameInfo.getRankPossibilityAt(round.getWinnerCard().calcRechterFromGuater().rank.ordinal()) == POSSIBLE));
 	}
