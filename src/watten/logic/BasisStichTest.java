@@ -19,21 +19,23 @@ package watten.logic;
 
 import static watten.logic.Possibility.*;
 
-import watten.CONSTANTS;
 import watten.Card;
 import watten.Round;
 import watten.Rounds;
 
 public class BasisStichTest {
 	
-	private final boolean VERBOSE = true;
-	
+	// all the collected information for former rounds
 	protected GameInfo gameInfo;
+	// the played rounds
 	protected Rounds rounds;
+	// winner card of the last round
 	protected Card lastWinnerCard;
+	// possibilities of rank/suit of TEST:
+	// e.g. testing for "Rechter" means: rank & suit have to be SURE!
 	protected Possibility winnerRankPossibility; 
 	protected Possibility winnerSuitPossibility;
-	protected boolean winningVELIsetsTestToIMPOSSIBLE;
+	// 
 	
 	/**
 	 * 
@@ -52,17 +54,9 @@ public class BasisStichTest {
 		catch(CloneNotSupportedException e) {
 			System.out.println("could not clone: " + gameInfo); 
 		}	
-
 	}
 	
-	/**
-	 * 
-	 * @return
-	 * 
-	 * Set special test properties.
-	 * 
-	 */
-	protected Possibility setTestSpezials() { return POSSIBLE; }
+	protected Possibility handleTestSpezials() { return POSSIBLE; }
 	
 	// new RUNTEST hoffentlich
 	public Possibility runTest_NEW() {
@@ -103,43 +97,36 @@ public class BasisStichTest {
 	 * 
 	 */
 	public Possibility runTest() {
-		//GameInfoMessage.appendVerboseMessage("TESTING for: Basisstich");
-		if(winningVELIsetsTestToIMPOSSIBLE && rounds.last().getWinnerCard().equals(CONSTANTS.VELI)) return IMPOSSIBLE;
-		//if(winningVELIsetsTestToIMPOSSIBLE && lastWinnerCard.equals(CONSTANTS.VELI)) return IMPOSSIBLE;
-
-		if(setTestSpezials() != POSSIBLE) return setTestSpezials();
-		
+		// test specials like 4 different colors can not be a "Farbstich"
+		if(handleTestSpezials() != POSSIBLE) return handleTestSpezials();
+		// if "Trumpf" & "Schlag" is known, easy testing if winner.rank & winner.suit fit in test definition
 		if(gameInfo.isRechterFix()) return makeTestsWithRechterFix();
-		
+		// test if new winnerRankPossibility or winnerSuitPossibility of concrete test conflicts with current possibilities
 		if(setNewGameInfo() != POSSIBLE) return setNewGameInfo();
-		
+		// test previous winners for contradiction
 		if(testPreviousWinners() != POSSIBLE) return testPreviousWinners();
 		
 		return POSSIBLE;
 	}
 	
-	// private Strategiemethoden
+	// private strategy methods
 	/**
 	 * 
-	 * @return
+	 * @return Possibility, if winner card fits definition of test. In this case only SURE or IMPOSSIBLE!
 	 * 
-	 * all tests, when "Rechter" is already known.
+	 * if "Rechter" is fix, "Schlag" and "Trumpf" are known.
+	 * So we just have to check if the winner of the last round is compatible
+	 * with the current test. E.g. for "LinkerStichTest" the 
+	 * winnerRankPossibility has to be SURE and
+	 * winnerSuitPossibility has to be IMPOSSIBLE.
+	 * And the same way for all other tests.
+	 * 
 	 */
 	private Possibility makeTestsWithRechterFix() { 
-		if(isGuaterInTrumpfStichTest()) return IMPOSSIBLE; // Spezialfall ausschliessen
-		if(winnerCardFitsStichTest()) return SURE; // alle anderen Fälle
+		if(gameInfo.getRankPossibilityAt(lastWinnerCard.rank.ordinal()) == winnerRankPossibility && 
+		   gameInfo.getSuitPossibilityAt(lastWinnerCard.suit.ordinal()) == winnerSuitPossibility) 
+				return SURE; 
 		else return IMPOSSIBLE;
-	}
-	
-	private boolean isGuaterInTrumpfStichTest() {
-		return winnerRankPossibility == IMPOSSIBLE && 
-			   winnerSuitPossibility == SURE && 
-			   gameInfo.isGuaterFix() &&
-			   gameInfo.getGuater().equals(lastWinnerCard);
-	}
-	private boolean winnerCardFitsStichTest() { // Farbe, Trump
-		return ((gameInfo.getRankPossibilityAt(lastWinnerCard.rank.ordinal()) == winnerRankPossibility) && 
-		        (gameInfo.getSuitPossibilityAt(lastWinnerCard.suit.ordinal()) == winnerSuitPossibility));
 	}
 	
 	private Possibility setNewGameInfo() {
@@ -147,7 +134,7 @@ public class BasisStichTest {
 		else {
 			gameInfo.setRankAt(lastWinnerCard.rank.ordinal(),winnerRankPossibility);
 			gameInfo.setSuitAt(lastWinnerCard.suit.ordinal(),winnerSuitPossibility);
-			return POSSIBLE;// behandelt alle Tests, wenn der Rechte fix ist.
+			return POSSIBLE;
 		}
 	}
 	
@@ -158,35 +145,39 @@ public class BasisStichTest {
 					   && (gameInfo.getSuitPossibilityAt(lastWinnerCard.suit.ordinal()) == winnerSuitPossibility.opposite()));
 	}
 
-	/**
-	 * 
-	 * @return
-	 * 
-	 * Method, where previous winners are tested for contradictions
-	 */
 	private Possibility testPreviousWinners() {
+		GameInfoMessage.verbose("Entering Test: Test previous winners");
 		for(Round round : rounds) {
-			if(!findWinnerPosInRound(round).equals(round.getWinnerCard()))
+			if(findWinnerInRound(round).isNOT(round.getWinnerCard()))
 				if(!correctWinner(round)) 
 					return IMPOSSIBLE;
 		}
 		return POSSIBLE;
 	}
 	
-	public Card findWinnerPosInRound(Round round) {
+	public Card findWinnerInRound(Round round) {
 		int currentWinnerPosition = 0;
 		for(int cardNumber = 1; cardNumber < round.size(); cardNumber++) 
 			if(!round.get(currentWinnerPosition).beats(round.get(cardNumber),gameInfo))
 				currentWinnerPosition = cardNumber;
 		return round.get(currentWinnerPosition);
 	}
-	
+	/**
+	 * 
+	 * @param round as round to test
+	 * @return 
+	 * 
+	 * a lot of logic happens here!
+	 * BUT WHY, WHAT & HOW ??????
+	 * 
+	 */
 	private boolean correctWinner(Round round) { 
+		GameInfoMessage.verbose("Entering Test: correct winner in round " + round);
 		if((correctColor(round) == IMPOSSIBLE) &&
-		   (correctNumber(round) == IMPOSSIBLE) &&
+		   (correctNumber(round) == IMPOSSIBLE) && 
 		   (correctToGuater(round) == IMPOSSIBLE))
 		{
-			if(VERBOSE) System.out.println("Stich Nr.: " + round + " weder Trumpf noch Schlag könnten erhöht werden!");
+			GameInfoMessage.verbose("Stich Nr.: " + round + " weder Trumpf noch Schlag könnten erhöht werden!");
 			return false;
 		}
 		return true;
@@ -197,7 +188,7 @@ public class BasisStichTest {
 	 * and previous winner are tested again for contradictions
 	 */
 	private Possibility correctColor(Round round) {
-		if(VERBOSE) System.out.println("entering correctColor in Stichnumber : " + round);
+		GameInfoMessage.verbose("Entering Test: correct winner suit in round " + round);
 		Possibility testValueColorUp = POSSIBLE;
 		try {
 			if(gameInfo.getSuitPossibilityAt(round.getWinnerCard().suit.ordinal()) == POSSIBLE) {
@@ -205,13 +196,12 @@ public class BasisStichTest {
 				gameInfo.setSuitAt(round.getWinnerCard().suit.ordinal(),SURE);
 				testValueColorUp = testPreviousWinners();
 				gameInfo = originalGameInfo;
-				if(VERBOSE) 
-					System.out.println("Stich Nr.: " + round + " corrected Color: " + round.getWinnerCard().suit.ordinal());
+				GameInfoMessage.verbose("Stich Nr.: " + round + " corrected Color: " + round.getWinnerCard().suit.ordinal());
 			} 
 			else testValueColorUp = IMPOSSIBLE;
 		} 
 		catch(CloneNotSupportedException e) {
-			if(VERBOSE) System.out.println("Result konnte nicht geklont werden!");
+			GameInfoMessage.verbose("Result konnte nicht geklont werden!");
 		}
 		return testValueColorUp;
 	}
@@ -222,7 +212,7 @@ public class BasisStichTest {
 	 * and previous winner are tested again for contradictions
 	 */
 	private Possibility correctNumber(Round round) {
-		if(VERBOSE) System.out.println("entering correctNumber in Stichnumber : " + round);
+		GameInfoMessage.verbose("Entering Test: correct winner rank in round " + round);
 		Possibility testValueNumberUp = POSSIBLE;
 		try {
 			if(gameInfo.getRankPossibilityAt(round.getWinnerCard().rank.ordinal()) == POSSIBLE) {
@@ -230,8 +220,7 @@ public class BasisStichTest {
 				gameInfo.setRankAt(round.getWinnerCard().rank.ordinal(),SURE);
 				testValueNumberUp = testPreviousWinners();
 				gameInfo = originalGameInfo;
-				if(VERBOSE) 
-					System.out.println("Stich Nr.: " + round + " corrected Number: " + round.getWinnerCard().rank.ordinal());
+				GameInfoMessage.verbose("Stich Nr.: " + round + " corrected Number: " + round.getWinnerCard().rank.ordinal());
 			}
 			else testValueNumberUp = IMPOSSIBLE;
 		} 
@@ -247,7 +236,7 @@ public class BasisStichTest {
 	 * and previous winner are tested again for contradictions
 	 */
 	private Possibility correctToGuater(Round round) {
-		if(VERBOSE) System.out.println("entering correctToGuater in Stichnumber : " + round);
+		GameInfoMessage.verbose("entering correctToGuater in Stichnumber : " + round);
 		if(!gameInfo.isMitGuatem()) return IMPOSSIBLE;
 		Possibility testGuaterUp = POSSIBLE;
 		try {
@@ -257,11 +246,9 @@ public class BasisStichTest {
 				gameInfo.setRankAt(round.getWinnerCard().calcRechterFromGuater().rank.ordinal(),SURE);
 				testGuaterUp = testPreviousWinners();
 				gameInfo = originalGameInfo;
-				if(VERBOSE) {
-					System.out.println("Stich Nr.: " + round); 
-					System.out.println("corrected Color: " + round.getWinnerCard().suit.ordinal());
-					System.out.println("corrected Number: " + round.getWinnerCard().calcRechterFromGuater().rank.ordinal());
-				}
+				GameInfoMessage.verbose("Stich Nr.: " + round + " corrected Color: " + 
+				round.getWinnerCard().suit.ordinal() + " corrected Number: " + round.getWinnerCard().calcRechterFromGuater().rank.ordinal());
+	
 			}
 			else testGuaterUp = IMPOSSIBLE;
 		}

@@ -23,8 +23,13 @@ public class Card {
 		return (card.suit == this.suit && card.rank == this.rank);
 	}
 	
+	public boolean isNOT(Card card) {
+		return !this.equals(card);
+	}
+
+	
 	public String toString() {
-		return new String(suit + " " + rank);
+		return new String("<" + suit + "/" + rank + ">");
 	}
 	
 	public Card calcGuaterFromRechter() {
@@ -75,10 +80,10 @@ public class Card {
 		if (gameInfo.isSchlagFix()) {
 			// FIRST LINKER beats
 			if (this.rank == gameInfo.getSchlag()) {
-				GameInfoMessage.verbose("Linker " + this + " beates Linker " + card);
+				GameInfoMessage.verbose("Linker vs 2nd Linker: " + this + " beates " + card);
 				return true;
 			}
-			// second LINKER only if NO first LINKEr
+			// second LINKER only if NO first LINKER
 			else if (card.rank == gameInfo.getSchlag()) {
 				GameInfoMessage.verbose("Linker " + card + " beates " + this);
 				return false;
@@ -125,12 +130,12 @@ public class Card {
 		// SUIT vs SUIT
 		// first SUIT beats second different SUIT
 		if(this.suit.ordinal() != card.suit.ordinal()) {
-			GameInfoMessage.verbose("Suit " + this + " beats " + card);
+			GameInfoMessage.verbose("Suit vs Suit: " + this + " beats " + card + "");
 			return true;
 		}
 		// SUIT beats same SUIT
 		if(this.rank.ordinal() >= card.rank.ordinal()) {
-			GameInfoMessage.verbose("Suit " + card + " beats " + this);
+			GameInfoMessage.verbose("Suit vs Suit: " + card + " beats " + this +"");
 			return true;
 		}
 		System.out.println("Error");

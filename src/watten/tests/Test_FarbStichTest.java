@@ -84,11 +84,12 @@ public class Test_FarbStichTest extends TestCase {
 		sc = new GameInfoCreator(stiche, result);
 		sc.setImpossibleNumbersToIMPOSSIBLE();
 		assertEquals(POSSIBLE, new FarbStichTest(result, stiche).runTest());
+		
+		stiche.add(new Round(deck.e9, deck.sK, deck.lU, deck.e10, 3));
 		// hier folgt, dass im Falle eines Farbstiches e,s,l keine Trümpfe sein
 		// können
-		// => h = Trumpf und Widerspruch hA sticht nicht e8
+		// => h = Trumpf und Widerspruch im vorhergehenden Stich hA sticht nicht e8
 		// e8 muss dann auf linken korrigiert werden!
-		stiche.add(new Round(deck.e9, deck.sK, deck.lU, deck.e10, 3));
 		sc.setImpossibleNumbersToIMPOSSIBLE();
 		assertEquals(POSSIBLE, new FarbStichTest(result, stiche).runTest());
 		
