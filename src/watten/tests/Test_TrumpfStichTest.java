@@ -62,10 +62,11 @@ public class Test_TrumpfStichTest extends TestCase {
 	}
 	
 	public void test_runTest_serien_runTests() {
+		
+		GameInfo result = new GameInfo(true);
 		System.out.println();
 		System.out.println("serien_Tests Nr. 1");
 		System.out.println("##########################################################");
-		GameInfo result = new GameInfo(true);
 		stiche.clear();
 		stiche.add(new Round(deck.e7, deck.hA, deck.l7, deck.e8, 3));
 		sc = new GameInfoCreator(stiche, result);
@@ -150,8 +151,8 @@ public class Test_TrumpfStichTest extends TestCase {
 		System.out.println("Stich Nr.: 3 -----------------------");
 		System.out.println(result.toString());
 		assertEquals(IMPOSSIBLE, new FarbStichTest(result, stiche).runTest());
-		//assertEquals(POSSIBLE, new TrumpfStichTest(result, stiche).runTest());
-		
+		assertEquals(POSSIBLE, new TrumpfStichTest(result, stiche).runTest());
+	
 	}
 	
 	public void test_runTest_Rechter_is_Fix() {

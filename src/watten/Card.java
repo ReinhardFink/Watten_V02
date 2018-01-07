@@ -33,14 +33,14 @@ public class Card {
 	}
 	
 	public Card calcGuaterFromRechter() {
-		if(this.rank == SIX) return null;
+		if(this.rank == SIX) return this;
 		Rank newRank = Rank.values()[(this.rank.ordinal() + 1) % Rank.values().length];
 		if(newRank == SIX) newRank = SEVEN;
 		return new Card(suit, newRank);
 	}
 	
 	public Card calcRechterFromGuater() {
-		if(this.rank == SIX) return null;
+		if(this.rank == SIX) return this;
 		Rank newRank = Rank.values()[(this.rank.ordinal() - 1 + Rank.values().length) % (Rank.values().length)];
 		if(newRank == SIX) newRank = ACE;
 		return new Card(suit, newRank);

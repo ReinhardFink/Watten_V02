@@ -15,7 +15,7 @@ public class Test_Card extends TestCase {
 		assertEquals(true, deck.hA.calcGuaterFromRechter().equals(deck.h7));
 		assertEquals(true, deck.lA.calcGuaterFromRechter().equals(deck.l7));
 		assertEquals(true, deck.sA.calcGuaterFromRechter().equals(deck.s7));
-		assertEquals(true, deck.s6.calcGuaterFromRechter() == null);
+		assertEquals(true, deck.s6.calcGuaterFromRechter().equals(deck.s6));
 	}
 	
 	public void test_calcRechterFromGuater() {

@@ -48,6 +48,7 @@ public class BasisStichTest {
 		this.winnerRankPossibility = null; 
 		this.winnerSuitPossibility = null;
 		this.lastWinnerCard = rounds.last().getWinnerCard();
+		// ever test works with his own cloned gameInfo
 		try {
 			this.gameInfo = gameInfo.clone();
 		} 
@@ -104,7 +105,7 @@ public class BasisStichTest {
 		// test if new winnerRankPossibility or winnerSuitPossibility of concrete test conflicts with current possibilities
 		if(setNewGameInfo() != POSSIBLE) return setNewGameInfo();
 		// test previous winners for contradiction
-		if(testPreviousWinners() != POSSIBLE) return testPreviousWinners();
+		if(testWinnerCards() != POSSIBLE) return testWinnerCards();
 		
 		return POSSIBLE;
 	}
@@ -144,13 +145,12 @@ public class BasisStichTest {
 			   ((winnerSuitPossibility != POSSIBLE) 
 					   && (gameInfo.getSuitPossibilityAt(lastWinnerCard.suit.ordinal()) == winnerSuitPossibility.opposite()));
 	}
-
-	private Possibility testPreviousWinners() {
+	
+	private Possibility testWinnerCards() {
 		GameInfoMessage.verbose("Entering Test: Test previous winners");
 		for(Round round : rounds) {
 			if(findWinnerInRound(round).isNOT(round.getWinnerCard()))
-				if(!correctWinner(round)) 
-					return IMPOSSIBLE;
+				return isWinnerUpgradable(round);
 		}
 		return POSSIBLE;
 	}
@@ -165,126 +165,132 @@ public class BasisStichTest {
 	/**
 	 * 
 	 * @param round as round to test
-	 * @return 
+	 * @return Possibility, of upgrade (suit or rank) of a previous winner
 	 * 
 	 * a lot of logic happens here!
-	 * BUT WHY, WHAT & HOW ??????
+	 * if a round is tested winnerRankPossibility & winnerSuitPossibility are set to the test specific values.
+	 * if(findWinnerInRound(round).isNOT(round.getWinnerCard())) THEN
+	 * it has to be found out, if there is an other winner possibility for round.getWinnerCard().
+	 * e.g.: 
+	 * 1: (e7, hA, l7, e8, 3)
+	 * 2: (e9, sK, lU, e10, 3)
+	 * if 2: is "Farbstiches" e,s,l can not be "Trümpfe"
+	 * => h = Trumpf and contradiction in 1: hA does NOT beat e8
+	 * therefore e8 has to be corrected to "Linker" <=> setRankAt(round.getWinnerCard().rank.ordinal(),SURE);
+	 * 
+	 * 1. check if suit upgrade possible
+	 * 2. check if rank upgrade possible
+	 * 
+	 * 1 & 2:
+	 * because testPreviousWinners() is recursive called
+	 * in suit & rank upgrade each other is called and therefore
+	 * "Rechter" is checked twice 
+	 *    
+	 * 3. check if upgrade to "Guatem" possible
 	 * 
 	 */
-	private boolean correctWinner(Round round) { 
+	private Possibility isWinnerUpgradable(Round round) { 
 		GameInfoMessage.verbose("Entering Test: correct winner in round " + round);
-		if((correctColor(round) == IMPOSSIBLE) &&
-		   (correctNumber(round) == IMPOSSIBLE) && 
-		   (correctToGuater(round) == IMPOSSIBLE))
-		{
-			GameInfoMessage.verbose("Stich Nr.: " + round + " weder Trumpf noch Schlag könnten erhöht werden!");
-			return false;
-		}
-		return true;
+		if (isSuitUpgradeable(round) == POSSIBLE) return POSSIBLE;
+		if (isRankUpgradeable(round) == POSSIBLE) return POSSIBLE;
+		if (gameInfo.isMitGuatem() && isToGuaterUpgradeable(round) == POSSIBLE) return POSSIBLE;
+		return IMPOSSIBLE;
 	}
 	
 	/**
+	 * 
+	 * @ return Possibility, if color upgrade is POSSIBLE
+	 * always POSSIBLE or IMPOSSIBLE
+	 * Default is POSSIBLE
 	 * if suit of winnerCard is POSSIBLE set it to SURE
 	 * and previous winner are tested again for contradictions
 	 */
-	private Possibility correctColor(Round round) {
+	private Possibility isSuitUpgradeable(Round round) {
 		GameInfoMessage.verbose("Entering Test: correct winner suit in round " + round);
 		Possibility testValueColorUp = POSSIBLE;
 		try {
 			if(gameInfo.getSuitPossibilityAt(round.getWinnerCard().suit.ordinal()) == POSSIBLE) {
 				GameInfo originalGameInfo = gameInfo.clone();
 				gameInfo.setSuitAt(round.getWinnerCard().suit.ordinal(),SURE);
-				testValueColorUp = testPreviousWinners();
+				testValueColorUp = testWinnerCards();
 				gameInfo = originalGameInfo;
-				GameInfoMessage.verbose("Stich Nr.: " + round + " corrected Color: " + round.getWinnerCard().suit.ordinal());
+				GameInfoMessage.verbose("Round: " + round + " corrected Suit: " + round.getWinnerCard().suit);
 			} 
 			else testValueColorUp = IMPOSSIBLE;
 		} 
 		catch(CloneNotSupportedException e) {
-			GameInfoMessage.verbose("Result konnte nicht geklont werden!");
+			GameInfoMessage.verbose("GameInfo could not be cloned!");
 		}
 		return testValueColorUp;
 	}
 
 	
 	/**
+	 * 
+	 * @ return Possibility, if suit upgrade is POSSIBLE
+	 * always POSSIBLE or IMPOSSIBLE
+	 * Default is POSSIBLE
 	 * if rank of winnerCard is POSSIBLE set it to SURE
 	 * and previous winner are tested again for contradictions
 	 */
-	private Possibility correctNumber(Round round) {
+	private Possibility isRankUpgradeable(Round round) {
 		GameInfoMessage.verbose("Entering Test: correct winner rank in round " + round);
 		Possibility testValueNumberUp = POSSIBLE;
 		try {
 			if(gameInfo.getRankPossibilityAt(round.getWinnerCard().rank.ordinal()) == POSSIBLE) {
 				GameInfo originalGameInfo = gameInfo.clone();
 				gameInfo.setRankAt(round.getWinnerCard().rank.ordinal(),SURE);
-				testValueNumberUp = testPreviousWinners();
+				testValueNumberUp = testWinnerCards();
 				gameInfo = originalGameInfo;
-				GameInfoMessage.verbose("Stich Nr.: " + round + " corrected Number: " + round.getWinnerCard().rank.ordinal());
+				GameInfoMessage.verbose("Round: " + round + " corrected Rank: " + round.getWinnerCard().rank);
 			}
 			else testValueNumberUp = IMPOSSIBLE;
 		} 
 		catch(CloneNotSupportedException e) {
-			System.out.println("Result konnte nicht geklont werden!");
+			System.out.println("GameInfo could not be cloned!");
 		}
 		return testValueNumberUp;
 	}
 
 	
 	/**
+	 * 
+	 * @ return Possibility, if suit & rank upgrade is POSSIBLE
+	 * always POSSIBLE or IMPOSSIBLE
+	 * Default is POSSIBLE
 	 * if rank of winnerCard is POSSIBLE set it to SURE
 	 * and previous winner are tested again for contradictions
 	 */
-	private Possibility correctToGuater(Round round) {
-		GameInfoMessage.verbose("entering correctToGuater in Stichnumber : " + round);
-		if(!gameInfo.isMitGuatem()) return IMPOSSIBLE;
+	
+	//TODO:
+	// Warum if(lastWinnerCard.equals(round.getWinnerCard())) return IMPOSSIBLE;
+	// NUR HIER und nicht auch in is..Upgradeable() ???????????
+	
+	
+	private Possibility isToGuaterUpgradeable(Round round) {
+		GameInfoMessage.verbose("Entering Test: correct winner to Guater in round " + round);
+		// not upgradable, because ????
+		if(lastWinnerCard.equals(round.getWinnerCard())) return IMPOSSIBLE;
 		Possibility testGuaterUp = POSSIBLE;
 		try {
-			if(isGuaterUpgradePossible(round)) {
+			if(gameInfo.getRankPossibilityAt(round.getWinnerCard().calcRechterFromGuater().rank.ordinal()) != IMPOSSIBLE 
+					&&
+			   gameInfo.getSuitPossibilityAt(round.getWinnerCard().suit.ordinal()) != IMPOSSIBLE) 
+			{
 				GameInfo originalGameInfo = gameInfo.clone();
 				gameInfo.setSuitAt(round.getWinnerCard().suit.ordinal(),SURE);
 				gameInfo.setRankAt(round.getWinnerCard().calcRechterFromGuater().rank.ordinal(),SURE);
-				testGuaterUp = testPreviousWinners();
+				testGuaterUp = testWinnerCards();
 				gameInfo = originalGameInfo;
-				GameInfoMessage.verbose("Stich Nr.: " + round + " corrected Color: " + 
-				round.getWinnerCard().suit.ordinal() + " corrected Number: " + round.getWinnerCard().calcRechterFromGuater().rank.ordinal());
+				GameInfoMessage.verbose("Round: " + round + " corrected Suit: " + 
+				round.getWinnerCard().suit + " corrected Rank: " + round.getWinnerCard().calcRechterFromGuater().rank);
 	
 			}
 			else testGuaterUp = IMPOSSIBLE;
 		}
 		catch(CloneNotSupportedException e) {
-			System.out.println("Result konnte nicht geklont werden!");
+			System.out.println("GameInfo could not be cloned!");
 		}
 		return testGuaterUp;
 	}
-
-	
-	private boolean isGuaterUpgradePossible(Round round) {
-		// keyCard selbst darf nicht verändert werden, da sie ja den Testfall definiert!
-		if(isKeyCardWinnerCardForUpgrade(round)) return false;
-		if(isNotColorAndNumberBlocked(round) && isColorOrNumberPossible(round))
-			return true;
-		else return false;
-	}
-
-	
-	private boolean isKeyCardWinnerCardForUpgrade(Round round) {
-		return ((lastWinnerCard.suit.ordinal() == round.getWinnerCard().suit.ordinal()) && 
-				   (lastWinnerCard.rank.ordinal() == round.getWinnerCard().rank.ordinal()));
-	}
-
-	
-	private boolean isNotColorAndNumberBlocked(Round round) {
-		// in Result: (¬-1 && ¬-1) &&  (0 || 0)
-		return ((gameInfo.getSuitPossibilityAt(round.getWinnerCard().suit.ordinal()) != IMPOSSIBLE) &&
-				(gameInfo.getRankPossibilityAt(round.getWinnerCard().calcRechterFromGuater().rank.ordinal()) != IMPOSSIBLE));
-	}
-
-	
-	private boolean isColorOrNumberPossible(Round round) {
-		return ((gameInfo.getSuitPossibilityAt(round.getWinnerCard().suit.ordinal()) == POSSIBLE) ||
-				(gameInfo.getRankPossibilityAt(round.getWinnerCard().calcRechterFromGuater().rank.ordinal()) == POSSIBLE));
-	}
-
-	
 }
